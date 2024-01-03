@@ -109,7 +109,8 @@ a:hover{
 
 .btn {
   background: #3498db;
-  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -we  margin: 0px 30px;
+  bkit-linear-gradient(top, #3498db, #2980b9);
   background-image: -moz-linear-gradient(top, #3498db, #2980b9);
   background-image: -ms-linear-gradient(top, #3498db, #2980b9);
   background-image: -o-linear-gradient(top, #3498db, #2980b9);
@@ -141,4 +142,20 @@ a:hover{
 
 .cp{
   color: #EAF6F6;
+}
+
+.table-container{
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+table{
+  border: 2px solid #051367;
+  width: 100%;
+  margin: 0 10rem;
+}
+
+th, td {
+  border: 1px solid #00005C;
 }
