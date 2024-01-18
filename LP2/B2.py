@@ -35,7 +35,7 @@ def respond_to_inquiry(inquiry):
         return random.choice(responses["default"])
 
 print("\n\nWelcome to the Customer Interaction Chatbot!")
-print("Type 'exit' to end the conversation.")
+print("Type 'exit' to end the conversation.\n")
 
 while True:
     user_input = input("Customer: ")
@@ -43,7 +43,7 @@ while True:
     if user_input.lower() == "exit":
         break
 
-    bot_response = respond_to_inquiry(user_input)
-    print("Chatbot: " + bot_response)
+    bot_response = respond_to_inquiry(user_input.lower())
+    print("Chatbot: " + bot_response + "\n")
 
-print("Thank you for using the Customer Interaction Chatbot. Goodbye!")
+print("\nThank you for using the Customer Interaction Chatbot. Goodbye!")
