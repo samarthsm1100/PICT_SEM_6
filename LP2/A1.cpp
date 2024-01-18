@@ -62,28 +62,30 @@ void DFS(Graph const &graph, int v, vector<bool> &discovered2)
  
 int main()
 {
-    // vector<Edge> edges = {
-    //     {1, 2}, {1, 3}, {1, 4}, {2, 5}, {2, 6}, {5, 9},
-    //     {5, 10}, {4, 7}, {4, 8}, {7, 11}, {7, 12}
-    // };
- 
-    // int n = 15;
- 
-    vector <Edge> edges;
-    int n;
 
-    cout << "Enter number of nodes : ";
-    cin >> n;
+    //<=========== EXAMPLE 1 ===========>
+    vector<Edge> edges = {
+        {1, 2}, {1, 3}, {1, 4}, {2, 5}, {2, 6}, {5, 9},
+        {5, 10}, {4, 7}, {4, 8}, {7, 11}, {7, 12}
+    };
+ 
+    int n = 15;
+ 
+    // vector <Edge> edges;
+    // int n;
 
-    while(true){
-        Edge e;
-        cin>>e.src>>e.dest;
-        edges.push_back(e);
-        char c; cin>>c;
-        if(c == 'N' || c == 'n'){
-            break;
-        }
-    }
+    // cout << "Enter number of nodes : ";
+    // cin >> n;
+
+    // while(true){
+    //     Edge e;
+    //     cin>>e.src>>e.dest;
+    //     edges.push_back(e);
+    //     char c; cin>>c;
+    //     if(c == 'N' || c == 'n'){
+    //         break;
+    //     }
+    // }
 
     Graph graph(edges, n);
  
