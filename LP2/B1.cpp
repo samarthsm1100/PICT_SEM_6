@@ -18,10 +18,24 @@ void printBoard(const vector<int>& board) {
 }
 
 bool isSafe(const vector<int>& board, int row, int col) {
+    //check for row
     for (int i = 0; i < row; ++i) {
-        if (board[i] == col || abs(board[i] - col) == abs(i - row))
+        if (board[i] == col)
             return false;
     }
+
+    //check for upper left diagonal
+    for (int i = row, j = col; i >= 0 && j >= 0; --i, --j) {
+        if (board[i] == j)
+            return false;
+    }
+
+    //check for upper right diagonal
+    for (int i = row, j = col; i >= 0 && j < board.size(); --i, ++j) {
+        if (board[i] == j)
+            return false;
+    }
+    
     return true;
 }
 
