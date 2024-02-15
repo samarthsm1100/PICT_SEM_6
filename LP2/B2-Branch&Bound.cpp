@@ -2,6 +2,7 @@
 using namespace std;
 
 int n;
+int cnt;
 
 void printSol(vector<vector<int>>board){
     for(int i = 0;i<n;i++){
@@ -13,6 +14,7 @@ void printSol(vector<vector<int>>board){
 }
 
 bool isSafe(int row ,int col ,vector<bool>rows , vector<bool>left_digonals ,vector<bool>Right_digonals){
+    cnt++;
     if(rows[row] == true || left_digonals[row+col] == true || Right_digonals[col-row+n-1] == true){
         return false;
     }   
@@ -50,6 +52,7 @@ void solve(vector<vector<int>>& board ,int col ,vector<bool>rows , vector<bool>l
 
 
 int main(){
+    cnt = 0;
     cout<<"Enter the value of n: ";
     cin>>n;
     int count = 0;
@@ -63,6 +66,8 @@ int main(){
     solve(board , 0, rows,left_digonals,Right_digonals, count);
 
     cout<<"\nTotal number of solutions: "<<count<<endl;
+
+    cout << "isSAfe : " << cnt << "\n";
 
     return 0;
 }

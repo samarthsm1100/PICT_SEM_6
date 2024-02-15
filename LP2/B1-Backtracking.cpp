@@ -3,6 +3,8 @@
 #include <cmath>
 using namespace std;
 
+int cnt = 0;
+
 void printBoard(const vector<int>& board) {
     int n = board.size();
     for (int i = 0; i < n; ++i) {
@@ -18,6 +20,7 @@ void printBoard(const vector<int>& board) {
 }
 
 bool isSafe(const vector<int>& board, int col, int row) {
+    cnt++;
     //check for column
     for (int i = 0; i < col; ++i) {
         if (board[i] == row)
@@ -69,5 +72,7 @@ int main() {
     cin >> n;
     int solutions = solveNQueens(n);
     cout << "Number of solutions for " << n << " queens: " << solutions << endl;
+
+    cout << "Number of times isSafe() is called: " << cnt << endl;
     return 0;
 }
