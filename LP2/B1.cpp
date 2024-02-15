@@ -7,7 +7,7 @@ void printBoard(const vector<int>& board) {
     int n = board.size();
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            if (board[i] == j)
+            if (board[j] == i)
                 cout << "Q ";
             else
                 cout << ". ";
@@ -17,21 +17,21 @@ void printBoard(const vector<int>& board) {
     cout << endl;
 }
 
-bool isSafe(const vector<int>& board, int row, int col) {
-    //check for row
-    for (int i = 0; i < row; ++i) {
-        if (board[i] == col)
+bool isSafe(const vector<int>& board, int col, int row) {
+    //check for column
+    for (int i = 0; i < col; ++i) {
+        if (board[i] == row)
             return false;
     }
 
     //check for upper left diagonal
-    for (int i = row, j = col; i >= 0 && j >= 0; --i, --j) {
+    for (int i = col, j = row; i >= 0 && j >= 0; --i, --j) {
         if (board[i] == j)
             return false;
     }
 
-    //check for upper right diagonal
-    for (int i = row, j = col; i >= 0 && j < board.size(); --i, ++j) {
+    //check for lower left diagonal
+    for (int i = col, j = row; i >= 0 && j < board.size(); --i, ++j) {
         if (board[i] == j)
             return false;
     }
@@ -39,19 +39,19 @@ bool isSafe(const vector<int>& board, int row, int col) {
     return true;
 }
 
-void solveNQueensUtil(int n, int row, vector<int>& board, int& count) {
-    if (row == n) {
+void solveNQueensUtil(int n, int col, vector<int>& board, int& count) {
+    if (col == n) {
         ++count;
         cout << "Solution " << count << ":\n";
         printBoard(board);
         return;
     }
 
-    for (int col = 0; col < n; ++col) {
-        if (isSafe(board, row, col)) {
-            board[row] = col;
-            solveNQueensUtil(n, row + 1, board, count);
-            board[row] = -1; // backtrack
+    for (int row = 0; row < n; ++row) {
+        if (isSafe(board, col, row)) {
+            board[col] = row;
+            solveNQueensUtil(n, col + 1, board, count);
+            board[col] = -1; // backtrack
         }
     }
 }
