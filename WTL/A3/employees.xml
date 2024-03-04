@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="employees.xsl"?>
+<!DOCTYPE employees SYSTEM "employees.dtd">
+<employees>
+	<employee eid="E1">
+		<name>A</name>
+		<department>IT</department>
+		<position>Software Engineer</position>
+		<joined>2020-02-18</joined>
+		<salary>85000</salary>
+	</employee>
+	<employee eid="E2">
+		<name>B</name>
+		<department>Marketing</department>
+		<position>Marketing Manager</position>
+		<joined>2017-01-09</joined>
+		<salary>60000</salary>
+	</employee>
+	<employee eid="E3">
+		<name>C</name>
+		<department>Finance</department>
+		<position>Financial Analyst</position>
+		<joined>2021-07-21</joined>
+		<salary>65000</salary>
+	</employee>
+	<employee eid="E4">
+		<name>D</name>
+		<department>Human Resources</department>
+		<position>HR coordinator</position>
+		<joined>2016-09-15</joined>
+		<salary>100000</salary>
+	</employee>
+	<employee eid="E5">
+		<name>E</name>
+		<department>Sales</department>
+		<position>Sales Representative</position>
+		<joined>2023-12-20</joined>
+		<salary>30000</salary>
+	</employee>
+</employees>
