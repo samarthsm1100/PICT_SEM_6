@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT employees (employee+)>
+<!ELEMENT employee (name,department,position,joined,salary)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT department (#PCDATA)>
+<!ELEMENT position (#PCDATA)>
+<!ELEMENT joined (#PCDATA)>
+<!ELEMENT salary (#PCDATA)>
+<!ATTLIST employee eid CDATA #REQUIRED>
