@@ -50,8 +50,8 @@ def a_star(matrix, start_loc, end_loc):
                 abs(new_position[1] - end_loc[1])
             )
 
-            if any(node.position == new_node.position for _, node in open_list):
-                continue
+            # if any(node.position == new_node.position for _, node in open_list):
+            #     continue
 
             heapq.heappush(open_list, (new_node.f, new_node))
 
