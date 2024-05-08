@@ -1,143 +1,141 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
 class Flight {
 public:
-    string flightNumber;
+    string id;
     string departure;
     string destination;
-    string departureTime;
-public:
-    Flight(string number, string dep, string dest, string time)
-        : flightNumber(number), departure(dep), destination(dest), departureTime(time) {}
-
-    string getFlightNumber() const {
-        return flightNumber;
+    string dtime;
+    
+    Flight(string id, string departure, string destination, string dtime) {
+        this->id = id;
+        this->departure = departure;
+        this->destination = destination;
+        this->dtime = dtime;
     }
 
-    string getDepartureTime() const {
-        return departureTime;
+    bool overlap(Flight& other) {
+        return departure == other.departure && dtime == other.dtime;
     }
-    string getDeparture()const{
-        return departure;
-    }
-    string getDestination()const{
-        return destination;
-    }
-    bool overlaps(const Flight& other) const {
-        return departure == other.departure && departureTime == other.departureTime;
-    }
-
-    void display() const {
-        cout << "Flight: " << flightNumber << ", Departure: " << departure
-             << ", Destination: " << destination << ", Departure Time: " << departureTime << endl;
+    
+    void display() {
+        cout << "Flight: " << id << ", Departure: " << departure << ", Destination: " << destination << ", Departure-Time: " << dtime << endl;
     }
 };
 
-class AirlineSystem {
+class Airline {
 public:
     vector<Flight> flights;
 
-    bool isFlightOverlapping(const Flight& newFlight) const {
-        for (const Flight& flight : flights) {
-            if (flight.overlaps(newFlight)) {
+    bool isOverlapping(Flight& newFlight) {
+        for (Flight& f : flights) {
+            if (f.overlap(newFlight)) {
                 return true;
             }
         }
         return false;
     }
-    string adjustTime(string time,int adjFac)
-    {
-        int hours = stoi(time.substr(0, 2));
-    int minutes = stoi(time.substr(3));
-
-    // Add 1 hour
-    hours = (hours + adjFac) % 24;
-
-    // Convert hours and minutes back to string format
-    string newTime = (hours < 10 ? "0" : "") + to_string(hours) + ":" + (minutes < 10 ? "0" : "") + to_string(minutes);
-    return newTime;
+    
+    string adjustTime(string dtime, int frac) {
+        int hour = stoi(dtime.substr(0, 2));
+        int mins = stoi(dtime.substr(3));
+        hour = (hour + frac) % 24;
+        if (hour < 0) hour += 24;
+        return (hour < 10 ? "0" : "") + to_string(hour) + ":" + (mins < 10 ? "0" : "") + to_string(mins);
     }
-    void addFlight(const Flight& newFlight) {
-        if (!isFlightOverlapping(newFlight)) {
-            flights.push_back(newFlight);
-            cout << "Flight added successfully." << endl;
-        } else {
-            cout << "Error: Flight overlaps with existing flights. Please choose a different schedule." << endl;
-            cout<<"Expert Opinion:------"<<endl;
-            cout<<"You can schedule your flight:"<<endl;
-            cout<<"1. 1 hour after "<<newFlight.departureTime<<" that is "<<adjustTime(newFlight.departureTime,1)<<endl;
-            cout<<"2. 1 hour before "<<newFlight.departureTime<<" that is "<<adjustTime(newFlight.departureTime,-1)<<endl;
-            cout<<"3. To cancel your flight"<<endl;
-            cout<<"Enter your Choice:";
-            int ch;
-            cin>>ch;
-            int adjFac;
-            if(ch==1 || ch==2)
-            {
-                if(ch==1)adjFac=1;
-                else adjFac=-1;
-            Flight temp=Flight(newFlight.getFlightNumber(),newFlight.getDeparture(),newFlight.getDestination(),adjustTime(newFlight.getDepartureTime(),adjFac));
-            addFlight(temp);
+    
+    bool alreadyExists(Flight& newFlight) {
+        for (Flight& f : flights) {
+            if (f.id == newFlight.id) {
+                return true;
             }
-            else
-            {
-                cout<<"Your Flight Scheduling Request has been cancelled"<<endl;
+        }
+        return false;
+    }
+    
+    void addFlight(Flight& newFlight) {
+        if (alreadyExists(newFlight)) {
+            cout << "Flight number already exists.\nPlease choose another flight\n"; 
+        } else if (!isOverlapping(newFlight)) {
+            flights.push_back(newFlight);
+            cout << "Flight added successfully!\n";
+        } else {
+            cout << "Error: Flights are overlapped\n";
+            cout << "Please choose any of the following options:\n";
+            cout << "1. Add flight 1 hour after that is " << adjustTime(newFlight.dtime, 1) <<"\n";
+            cout << "2. Add flight 1 hour before that is " << adjustTime(newFlight.dtime, -1) <<"\n";
+            cout << "3. Cancel flight\n";
+            
+            int choice; 
+            cout << "Enter choice: "; cin >> choice;
+            if (choice == 1 || choice == 2) {
+                int frac = (choice == 1) ? 1 : -1;
+                Flight temp(newFlight.id, newFlight.departure, newFlight.destination, adjustTime(newFlight.dtime, frac));
+                addFlight(temp);
+                cout << "New flight added successfully!\n";
+            } else {
+                cout << "Flight cancelled!\n";
             }
         }
     }
-
-    void removeFlight(const string& flightNumber) {
-        auto it = find_if(flights.begin(), flights.end(), [&flightNumber](const Flight& flight) {
-            return flight.getFlightNumber() == flightNumber;
+    
+    void removeFlight(string id) {
+        auto it = find_if(flights.begin(), flights.end(), [&id](Flight& flight) {
+            return flight.id == id;
         });
-
         if (it != flights.end()) {
             flights.erase(it);
-            cout << "Flight " << flightNumber << " removed successfully." << endl;
+            cout << "Flight removed successfully!\n";
         } else {
-            cout << "Error: Flight " << flightNumber << " not found." << endl;
+            cout << "Flight does not exist\n";
         }
     }
-
-    void displayFlights() const {
-        if (flights.empty()) {
-            cout << "No flights scheduled." << endl;
-        } else {
-            cout << "Scheduled Flights:" << endl;
-            for (const Flight& flight : flights) {
-                flight.display();
-            }
-        }
-    }
-     void searchFlightsByDepartureCity(const string& depCity) const {
+    
+    void showFlightsByDeparture(string dept) {
         bool found = false;
-        cout << "Flights departing from " << depCity << ":" << endl;
-        for (const Flight& flight : flights) {
-            if (flight.getDeparture() == depCity) {
-                flight.display();
+        for (Flight& f : flights) {
+            if (f.departure == dept) {
+                f.display();
                 found = true;
             }
         }
         if (!found) {
-            cout << "No flights found departing from " << depCity << endl;
+            cout << "No flights exist for this departure\n";
         }
     }
-
-    void displayFlightsSortedByDepartureTime() const {
-        vector<Flight> sortedFlights = flights;
-        sort(sortedFlights.begin(), sortedFlights.end(), [](const Flight& a, const Flight& b) {
-            return a.getDepartureTime() < b.getDepartureTime();
-        });
-        cout << "Flights Sorted by Departure Time:" << endl;
-        for (const Flight& flight : sortedFlights) {
-            flight.display();
+    
+    void sortFlightsByDepartureTime() {
+        if (flights.empty()) {
+            cout << "Currently no flights to display\n";
+        } else {
+            vector<Flight> temp = flights;
+            sort(temp.begin(), temp.end(), [](Flight& a, Flight& b) {
+                return a.dtime < b.dtime;
+            });
+            for (Flight& f : temp) {
+                f.display();
+            }
+        }
+    }
+    
+    void displayFlights() {
+        if (flights.empty()) {
+            cout << "No flights scheduled.\n";
+        } else {
+            cout << "Scheduled Flights:\n";
+            for (Flight& flight : flights) {
+                flight.display();
+            }
         }
     }
 };
 
 int main() {
-    AirlineSystem system;
+    Airline system;
     int choice;
 
     do {
@@ -162,7 +160,8 @@ int main() {
                 cin >> dest;
                 cout << "Enter departure time (HH:MM): ";
                 cin >> time;
-                system.addFlight(Flight(number, dep, dest, time));
+                Flight newFlight(number, dep, dest, time);
+                system.addFlight(newFlight);
                 break;
             }
             case 2: {
@@ -179,11 +178,11 @@ int main() {
                 string depCity;
                 cout << "Enter departure city to search for flights: ";
                 cin >> depCity;
-                system.searchFlightsByDepartureCity(depCity);
+                system.showFlightsByDeparture(depCity);
                 break;
             }
             case 5:
-                system.displayFlightsSortedByDepartureTime();
+                system.sortFlightsByDepartureTime();
                 break;
             case 6:
                 cout << "Exiting program.\n";
