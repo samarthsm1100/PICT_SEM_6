@@ -1,73 +1,65 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-int n;
-int cnt;
-
-void printSol(vector<vector<int>>board){
-    for(int i = 0;i<n;i++){
-        for(int j = 0;j<n;j++){
-            cout<<board[i][j]<<" ";
+void printSolution(const vector<vector<int>>& board) {
+    int n = board.size();
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << board[i][j] << " ";
         }
-        cout<<"\n";
+        cout << "\n";
     }
 }
 
-bool isSafe(int row ,int col ,vector<bool>rows , vector<bool>left_digonals ,vector<bool>Right_digonals){
-    cnt++;
-    if(rows[row] == true || left_digonals[row+col] == true || Right_digonals[col-row+n-1] == true){
+bool isSafe(int row, int col, const vector<bool>& rows, const vector<bool>& leftDiagonals, const vector<bool>& rightDiagonals, int& safetyChecks) {
+    safetyChecks++;
+    if (rows[row] || leftDiagonals[row + col] || rightDiagonals[col - row + rows.size() - 1]) {
         return false;
-    }   
+    }
     return true;
 }
 
-void solve(vector<vector<int>>& board ,int col ,vector<bool>rows , vector<bool>left_digonals ,vector<bool>Right_digonals, int &count){	 
-	// base case : If all Queens are placed 
-	if(col==n){
-        count++;
-        cout << "\nSolution "<< count << " : " << endl;
-        printSol(board);
-		return;
-	}
+void solveNQueens(vector<vector<int>>& board, int col, vector<bool>& rows, vector<bool>& leftDiagonals, vector<bool>& rightDiagonals, int& solutionCount, int& safetyChecks) {
+    int n = board.size();
+    if (col == n) {
+        cout << "\nSolution " << ++solutionCount << ":\n";
+        printSolution(board);
+        return;
+    }
 
-	for(int i = 0;i<n;i++){
-		if(isSafe(i,col,rows,left_digonals,Right_digonals) == true){
-            // Place the Queen
-			rows[i] = true;
-			left_digonals[i+col] = true;
-			Right_digonals[col-i+n-1] = true;
-			board[i][col] = 1; 
+    for (int row = 0; row < n; row++) {
+        if (isSafe(row, col, rows, leftDiagonals, rightDiagonals, safetyChecks)) {
+            board[row][col] = 1;
+            rows[row] = true;
+            leftDiagonals[row + col] = true;
+            rightDiagonals[col - row + n - 1] = true;
 
-			solve(board,col+1,rows,left_digonals,Right_digonals, count);
+            solveNQueens(board, col + 1, rows, leftDiagonals, rightDiagonals, solutionCount, safetyChecks);
 
-			// Backtracking 
-			rows[i] = false;
-			left_digonals[i+col] = false;
-			Right_digonals[col-i+n-1] = false;
-			board[i][col] = 0; 
-
-		}
-	}
+            board[row][col] = 0;
+            rows[row] = false;
+            leftDiagonals[row + col] = false;
+            rightDiagonals[col - row + n - 1] = false;
+        }
+    }
 }
 
+int main() {
+    int n;
+    cout << "Enter the value of n: ";
+    cin >> n;
+    vector<vector<int>> board(n, vector<int>(n, 0));
+    vector<bool> rows(n, false);
+    vector<bool> leftDiagonals(2 * n - 1, false);
+    vector<bool> rightDiagonals(2 * n - 1, false);
+    int solutionCount = 0;
+    int safetyChecks = 0;
 
-int main(){
-    cnt = 0;
-    cout<<"Enter the value of n: ";
-    cin>>n;
-    int count = 0;
+    solveNQueens(board, 0, rows, leftDiagonals, rightDiagonals, solutionCount, safetyChecks);
 
-    vector<vector<int>>board(n,vector<int>(n,0));
-    vector<bool>rows(n,false);		 
-
-    vector<bool>left_digonals(2*n-1,false);
-    vector<bool>Right_digonals(2*n-1,false);
-
-    solve(board , 0, rows,left_digonals,Right_digonals, count);
-
-    cout<<"\nTotal number of solutions: "<<count<<endl;
-
-    cout << "isSAfe : " << cnt << "\n";
+    cout << "\nTotal number of solutions: " << solutionCount << endl;
+    cout << "Number of safety checks: " << safetyChecks << endl;
 
     return 0;
 }
